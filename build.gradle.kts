@@ -25,6 +25,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-swing:1.10.2")
 
+    implementation("org.jetbrains.compose.material3:material3-desktop:1.9.0")
     implementation("org.jetbrains.androidx.navigation:navigation-compose:2.9.2")
     add("linuxAmd64", "org.jetbrains.compose.desktop:desktop-jvm-linux-x64:1.11.0")
     add("linuxAarch64", "org.jetbrains.compose.desktop:desktop-jvm-linux-arm64:1.11.0")

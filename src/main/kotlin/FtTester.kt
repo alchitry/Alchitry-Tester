@@ -1,8 +1,11 @@
 package com.alchitry.tester
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material.Text
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.alchitry.hardware.AlchitryFt
 import com.alchitry.hardware.FtType
 import com.alchitry.hardware.usb.ftdi.D3xx
@@ -16,6 +19,18 @@ import kotlin.time.TimeSource
 private const val BUFFER_LEN = 1024 * 1024
 private const val BUFFER_COUNT = 2
 private const val WRITE_COUNT = 1000
+
+@Composable
+fun FtTesterScreen() {
+    val tester = remember { FtTester(false) }
+    tester.statusUI()
+}
+
+@Composable
+fun FtPlusTesterScreen() {
+    val tester = remember { FtTester(true) }
+    tester.statusUI()
+}
 
 class FtTester(val isPlus: Boolean) {
     enum class FtTesterStates {
@@ -35,11 +50,11 @@ class FtTester(val isPlus: Boolean) {
     var dataRate by mutableStateOf(0.0)
 
     @Composable
-    fun FtTesterView() {
+    fun statusUI() {
         LaunchedEffect(Unit) {
             runTests()
         }
-        Column {
+        Column(Modifier.padding(20.dp)) {
             Text(state.name)
             Text("Error: $errorMessage")
             Text("SuperSpeed: $superSpeed")
@@ -92,7 +107,7 @@ class FtTester(val isPlus: Boolean) {
                     launch(Dispatchers.IO) { // write loop
                         var next = 0u
                         val contexts = MutableList<D3xx.DeviceConnection.OverlappedContext?>(BUFFER_COUNT) { null }
-                        for (k in 0 until WRITE_COUNT/BUFFER_COUNT) {
+                        for (k in 0 until WRITE_COUNT / BUFFER_COUNT) {
                             contexts.forEachIndexed { index, context ->
                                 ensureActive()
                                 if (context != null) {
@@ -118,7 +133,7 @@ class FtTester(val isPlus: Boolean) {
                         var total = 0u
                         var next = 0u
                         val contexts = MutableList<D3xx.DeviceConnection.OverlappedContext?>(BUFFER_COUNT) { null }
-                        for (k in 0 until WRITE_COUNT/BUFFER_COUNT) {
+                        for (k in 0 until WRITE_COUNT / BUFFER_COUNT) {
                             contexts.forEachIndexed { index, context ->
                                 ensureActive()
                                 if (context != null) {
