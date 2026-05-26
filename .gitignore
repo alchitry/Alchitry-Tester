@@ -45,3 +45,4 @@ bin/
 .DS_Store
 /conveyor-local.conf
 /secrets.properties
+/.junie/

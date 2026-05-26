@@ -1,6 +1,7 @@
 package com.alchitry.tester
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.window.ApplicationScope
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.WindowPlacement
@@ -16,6 +17,7 @@ fun main() {
 
 @Composable
 fun ApplicationScope.MainWindow() {
+    val tester = remember{ FtTester(false) }
     Window(
         title="Alchitry Tester",
         state = rememberWindowState(placement = WindowPlacement.Fullscreen),
@@ -23,6 +25,6 @@ fun ApplicationScope.MainWindow() {
             exitApplication()
         }
     ) {
-
+        tester.FtTesterView()
     }
 }

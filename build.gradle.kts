@@ -19,15 +19,13 @@ repositories {
 
 dependencies {
     testImplementation(kotlin("test"))
+
+    implementation("com.github.alchitry:Alchitry-Interface:2c56e79acf")
+
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-swing:1.10.2")
 
-    // Use add() for your custom/platform-specific configurations
-    add("macAarch64", "io.github.dsheirer:libusb4java-darwin-aarch64:1.3.1")
-
-    implementation("com.fazecast:jSerialComm:2.11.4")
-    implementation("com.github.alchitry.yad2xx:yad2xxJava:8d48cda")
-
+    implementation("org.jetbrains.androidx.navigation:navigation-compose:2.9.2")
     add("linuxAmd64", "org.jetbrains.compose.desktop:desktop-jvm-linux-x64:1.11.0")
     add("linuxAarch64", "org.jetbrains.compose.desktop:desktop-jvm-linux-arm64:1.11.0")
     add("macAmd64", "org.jetbrains.compose.desktop:desktop-jvm-macos-x64:1.11.0")
