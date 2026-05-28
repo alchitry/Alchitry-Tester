@@ -74,7 +74,7 @@ class FtTester(val isPlus: Boolean) {
     private var boardsPerHour by mutableStateOf(0.0)
     private var dataRate by mutableStateOf(0.0)
 
-    private val minDataRateThreshold = if (isPlus) 300 else 170
+    private val minDataRateThreshold = if (isPlus) 315 else 170
     private val bufferLen = 1024 * 1024
     private val bufferCount = 2
     private val writeCount = if (isPlus) 600 else 300
