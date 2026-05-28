@@ -44,7 +44,7 @@ sealed interface AlchitryColors {
 }
 
 data object DarkAlchitryColors : AlchitryColors {
-    override val Accent = Color(0xFFB98416)
+    override val Accent = Color(0xFFfaac1f)
     override val DarkAccent = Color(0xFF333330)
 
     override val ProgressBar = Color(0xFFE19A1A)
