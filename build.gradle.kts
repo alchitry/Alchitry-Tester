@@ -30,7 +30,7 @@ repositories {
 dependencies {
     testImplementation(kotlin("test"))
 
-    implementation("com.github.alchitry:Alchitry-Interface:62639d9c4c")
+    implementation("com.alchitry:Alchitry-Interface:1.0.0")
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-swing:1.10.2")
@@ -74,7 +74,6 @@ tasks.registerConveyorTask("raspberryPi", "linux-app", "-Kapp.machines=linux.aar
 tasks.registerConveyorTask("raspberryPiDeb", "linux-tarball", "-Kapp.machines=linux.aarch64.glibc")
 
 tasks.register<Exec>("copyToPi") {
-
     description = "Copy the project to the Raspberry Pi over SSH"
     group = "deploy"
     dependsOn("raspberryPi")

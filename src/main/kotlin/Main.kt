@@ -4,14 +4,15 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.ApplicationScope
 import androidx.compose.ui.window.Window
@@ -25,6 +26,9 @@ import com.alchitry.hardware.Board
 import com.alchitry.labs2.ui.theme.AlchitryTheme
 
 fun main() {
+//    runBlocking {
+//        println(dumpEEPROM())
+//    }
     application {
         MainWindow()
     }
@@ -57,14 +61,20 @@ fun ApplicationScope.MainWindow() {
                             )
 
                             Row(horizontalArrangement = Arrangement.spacedBy(20.dp)) {
-                                ElementButton("au.svg") {
-                                    navController.navigate("au_tester")
-                                }
                                 ElementButton("cu.svg") {
                                     navController.navigate("cu_tester")
                                 }
-                                ElementButton("pt.svg") {
-                                    navController.navigate("pt_tester")
+                                ElementButton("au.svg", "35T") {
+                                    navController.navigate("au_tester_35t")
+                                }
+                                ElementButton("au.svg", "50T") {
+                                    navController.navigate("au_tester_50t")
+                                }
+                                ElementButton("pt.svg", "100T") {
+                                    navController.navigate("pt_tester_100t")
+                                }
+                                ElementButton("pt.svg", "200T") {
+                                    navController.navigate("pt_tester_200t")
                                 }
                                 ElementButton("ft.svg") {
                                     navController.navigate("ft_tester")
@@ -75,16 +85,20 @@ fun ApplicationScope.MainWindow() {
                             }
                         }
                     }
-                    composable("au_tester") {
-                        val tester = remember { FpgaTester(Board.AlchitryAuV2) }
+                    composable("au_tester_35t") {
+                        val tester = remember { FpgaTester(Board.AlchitryAuV2T35) }
                         tester.statusUI{ navController.popBackStack() }
                     }
                     composable("cu_tester") {
                         val tester = remember { FpgaTester(Board.AlchitryCuV2) }
                         tester.statusUI{ navController.popBackStack() }
                     }
-                    composable("pt_tester") {
-                        val tester = remember { FpgaTester(Board.AlchitryPtV2) }
+                    composable("pt_tester_100t") {
+                        val tester = remember { FpgaTester(Board.AlchitryPtV2T100) }
+                        tester.statusUI{ navController.popBackStack() }
+                    }
+                    composable("pt_tester_200t") {
+                        val tester = remember { FpgaTester(Board.AlchitryPtV2T200) }
                         tester.statusUI{ navController.popBackStack() }
                     }
                     composable("ft_tester") {
@@ -102,7 +116,7 @@ fun ApplicationScope.MainWindow() {
 }
 
 @Composable
-fun ElementButton(icon: String, onClick: () -> Unit) {
+fun ElementButton(icon: String, size: String? = null, onClick: () -> Unit) {
     Surface(
         tonalElevation = 100.dp,
         shadowElevation = 10.dp,
@@ -117,6 +131,9 @@ fun ElementButton(icon: String, onClick: () -> Unit) {
                 contentScale = ContentScale.Fit,
                 modifier = Modifier.size(100.dp)
             )
+            if (size != null) {
+                Text(size, color = MaterialTheme.colorScheme.primary, modifier = Modifier.align(Alignment.BottomEnd))
+            }
         }
     }
 }

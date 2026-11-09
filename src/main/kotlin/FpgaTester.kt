@@ -18,10 +18,8 @@ import com.alchitry.hardware.Board
 import com.alchitry.hardware.usb.BoardLoader
 import com.alchitry.hardware.usb.SerialDevice
 import com.alchitry.hardware.usb.UsbUtil
-import com.alchitry.hardware.usb.ftdi.AU_EEPROM_DATA
-import com.alchitry.hardware.usb.ftdi.CU_EEPROM_DATA
 import com.alchitry.hardware.usb.ftdi.Ftdi
-import com.alchitry.hardware.usb.ftdi.PT_EEPROM_DATA
+import com.alchitry.hardware.usb.ftdi.generateEEPROM
 import com.alchitry.labs2.ui.theme.AlchitryColors
 import kotlinx.coroutines.*
 import kotlin.experimental.and
@@ -113,9 +111,9 @@ class FpgaTester(val board: Board) {
                         modifier = Modifier.height(75.dp)
                     )
                     val boardImage = when (board) {
-                        Board.AlchitryAu, Board.AlchitryAuPlus, Board.AlchitryAuV2 -> "au"
+                        Board.AlchitryAu, Board.AlchitryAuPlus, Board.AlchitryAuV2T35, Board.AlchitryAuV2T50 -> "au"
                         Board.AlchitryCu, Board.AlchitryCuV2 -> "cu"
-                        Board.AlchitryPtV2 -> "pt"
+                        Board.AlchitryPtV2T100, Board.AlchitryPtV2T200 -> "pt"
                     }
                     Image(
                         painter = painterResource("$boardImage.svg"),
@@ -123,6 +121,14 @@ class FpgaTester(val board: Board) {
                         contentScale = ContentScale.FillHeight,
                         modifier = Modifier.height(75.dp)
                     )
+                     when (board) {
+                        Board.AlchitryPtV2T100 -> "100T"
+                        Board.AlchitryPtV2T200 -> "200T"
+                        else -> null
+                    }?.let { sizeText ->
+                        Text(sizeText, color = MaterialTheme.colorScheme.primary)
+                     }
+
                 }
                 Spacer(Modifier.height(10.dp))
 
@@ -233,14 +239,7 @@ class FpgaTester(val board: Board) {
                     state = State.ProgramEeprom
                     eepromProgrammed = ActionState.Running
                     try {
-                        ftdi.programEEPROM(
-                            when (board) {
-                                Board.AlchitryAuV2 -> AU_EEPROM_DATA
-                                Board.AlchitryCuV2 -> CU_EEPROM_DATA
-                                Board.AlchitryPtV2 -> PT_EEPROM_DATA
-                                else -> error("Unsupported board type: ${board.name}")
-                            }
-                        )
+                        ftdi.programEEPROM(generateEEPROM(board) )
                     } catch (e: Exception) {
                         eepromProgrammed = ActionState.Failure
                         throw e
@@ -252,9 +251,11 @@ class FpgaTester(val board: Board) {
                 state = State.ConnectToProgram
                 waitForDevice(board)
                 val boardPrefix = when (board) {
-                    Board.AlchitryAuV2 -> "au_v2"
+                    Board.AlchitryAuV2T35 -> "au_v2_35t"
+                    Board.AlchitryAuV2T50 -> "au_v2_50t"
                     Board.AlchitryCuV2 -> "cu_v2"
-                    Board.AlchitryPtV2 -> "pt_v2"
+                    Board.AlchitryPtV2T100 -> "pt_v2_100t"
+                    Board.AlchitryPtV2T200 -> "pt_v2_200t"
                     else -> error("Unsupported board: ${board.name}")
                 }
 
@@ -362,8 +363,12 @@ class FpgaTester(val board: Board) {
             boardsPerHour = 1.0 / totalTime.toDouble(DurationUnit.HOURS)
         }
     }
+}
 
-
+suspend fun dumpEEPROM(): String {
+    return openFirstOfType(null).use { ftdi ->
+        ftdi.readEEPROM()
+    }
 }
 
 private suspend fun waitForDevice(type: Board) {
