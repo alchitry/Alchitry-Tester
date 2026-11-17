@@ -14,11 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.ApplicationScope
-import androidx.compose.ui.window.Window
-import androidx.compose.ui.window.WindowPlacement
-import androidx.compose.ui.window.application
-import androidx.compose.ui.window.rememberWindowState
+import androidx.compose.ui.window.*
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -51,7 +47,8 @@ fun ApplicationScope.MainWindow() {
                     composable("home") {
                         Column(
                             Modifier.padding(10.dp, 5.dp, 10.dp, 10.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.spacedBy(20.dp)
                         ) {
                             Image(
                                 painter = painterResource("alchitry_tester.svg"),
@@ -76,6 +73,8 @@ fun ApplicationScope.MainWindow() {
                                 ElementButton("pt.svg", "200T") {
                                     navController.navigate("pt_tester_200t")
                                 }
+                            }
+                            Row(horizontalArrangement = Arrangement.spacedBy(20.dp)) {
                                 ElementButton("ft.svg") {
                                     navController.navigate("ft_tester")
                                 }
@@ -87,27 +86,27 @@ fun ApplicationScope.MainWindow() {
                     }
                     composable("au_tester_35t") {
                         val tester = remember { FpgaTester(Board.AlchitryAuV2T35) }
-                        tester.statusUI{ navController.popBackStack() }
+                        tester.statusUI { navController.popBackStack() }
                     }
                     composable("cu_tester") {
                         val tester = remember { FpgaTester(Board.AlchitryCuV2) }
-                        tester.statusUI{ navController.popBackStack() }
+                        tester.statusUI { navController.popBackStack() }
                     }
                     composable("pt_tester_100t") {
                         val tester = remember { FpgaTester(Board.AlchitryPtV2T100) }
-                        tester.statusUI{ navController.popBackStack() }
+                        tester.statusUI { navController.popBackStack() }
                     }
                     composable("pt_tester_200t") {
                         val tester = remember { FpgaTester(Board.AlchitryPtV2T200) }
-                        tester.statusUI{ navController.popBackStack() }
+                        tester.statusUI { navController.popBackStack() }
                     }
                     composable("ft_tester") {
                         val tester = remember { FtTester(false) }
-                        tester.statusUI{ navController.popBackStack() }
+                        tester.statusUI { navController.popBackStack() }
                     }
                     composable("ft_plus_tester") {
                         val tester = remember { FtTester(true) }
-                        tester.statusUI{ navController.popBackStack() }
+                        tester.statusUI { navController.popBackStack() }
                     }
                 }
             }
